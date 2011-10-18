@@ -1,0 +1,6 @@
+13/09/2009
+
+Fixed bug in learn.cc to take into account learning rate for
+regularization.  Changed regularization multiplier for deformation
+parameters to compensate for the bug fix.
+
