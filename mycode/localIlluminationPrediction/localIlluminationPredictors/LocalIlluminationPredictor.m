@@ -21,7 +21,7 @@ classdef LocalIlluminationPredictor
     
     properties (Constant)
         % results paths
-        classifBasePath = '/nfs/hn01/jlalonde/results/illuminationSingleImage/localIlluminationPredictors/';
+        classifBasePath = getPathName('code', 'mycode', 'data', 'localIlluminationPredictors');
     end
         
     methods 
