@@ -1,25 +1,16 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% function trainLocalLightingClassifier
-%  Train a local lighting classifier based on object features.
+function trainSunVisibilityClassifier
+% Trains a sun visibility classifier based on features computed
+% over the whole image.
 % 
-% Input parameters:
-%
-% Output parameters:
-%   
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% function trainSunVisibilityClassifier
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Copyright 2006-2010 Jean-Francois Lalonde
-% Carnegie Mellon University
-% Do not distribute
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   trainSunVisibilityClassifier
+% 
+% ----------
+% Jean-Francois Lalonde
 
 %% Setup
-setPath;
 
-newBasePath = fullfile(basePath, 'visibilityClassifier');
-outputBasePath = fullfile(basePath, 'globalModel', 'visibility');
+newBasePath = getPathName('results', 'visibilityClassifier');
+outputBasePath = getPathName('results', 'globalModel', 'visibility');
 featuresBasePath = fullfile(newBasePath, 'features');
 
 featuresFilename = 'person';
