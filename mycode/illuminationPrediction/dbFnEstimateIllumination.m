@@ -47,6 +47,13 @@ initrand(mean(img(:)));
 %% Geometric context information
 geomContextInfo = load(fullfile(args.DbPath, imgInfo.geomContext.filename));
 
+%% Shadows information
+bndInfo = load(fullfile(args.DbPath, imgInfo.wseg25.filename));
+shadowInfo = load(fullfile(args.DbPath, imgInfo.shadows.filename));
+
+%% Pedestrian detection information
+detInfo = load(fullfile(args.DbPath, imgInfo.detObjects.person.filename));
+
 %% Do we need to estimate the horizon?
 if args.DoEstimateHorizon
     horizonLine = [];
@@ -57,11 +64,12 @@ end
 %% Estimate the illumination
 [probSun, skyData, shadowsData, wallsData, pedsData] = ...
     estimateIllumination(img, focalLength, horizonLine, ...
+    'GeomContextInfo', geomContextInfo, ...
     'DoVote', args.DoVote, 'DoWeightVote', args.DoWeightVote, 'DoCueConfidence', args.DoCueConfidence, ...
     'DoSky', args.DoSky, 'SkyPredictor', args.SkyPredictor, 'DoSkyClassif', args.DoSkyClassif, 'SkyDb', args.SkyDb, ...
-    'DoShadows', args.DoShadows, 'ShadowsPredictor', args.ShadowsPredictor, ...
+    'DoShadows', args.DoShadows, 'ShadowsPredictor', args.ShadowsPredictor, 'BndInfo', bndInfo, 'ShadowInfo', shadowInfo, ...
     'DoWalls', args.DoWalls, 'WallPredictor', args.WallPredictor, ...
-    'DoPedestrians', args.DoPedestrians, 'PedestrianPredictor', args.PedestrianPredictor);
+    'DoPedestrians', args.DoPedestrians, 'PedestrianPredictor', args.PedestrianPredictor, 'DetInfo', detInfo);
 
 %% Save the results
 if args.DoSave

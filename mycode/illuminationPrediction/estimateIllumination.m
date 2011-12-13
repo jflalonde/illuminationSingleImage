@@ -12,15 +12,23 @@ function [probSun, skyData, shadowsData, wallsData, pedsData] = ...
 
 % parse arguments
 defaultArgs = struct('DoEstimateHorizon', 0, 'DoVote', 0, 'DoWeightVote', 0, 'DoCueConfidence', 0, ...
-    'DoSky', 1, 'SkyPredictor', [], 'DoSkyClassif', 0, 'SkyDb', [], ...
-    'DoShadows', 1, 'ShadowsPredictor', [], ...
-    'DoWalls', 1, 'WallPredictor', [], ...
-    'DoPedestrians', 1, 'PedestrianPredictor', []);
+    'GeomContextInfo', [], ...
+    'DoSky', 0, 'SkyPredictor', [], 'DoSkyClassif', 0, 'SkyDb', [], ...
+    'DoShadows', 0, 'ShadowsPredictor', [], 'BndInfo', [], 'ShadowInfo', [], ...
+    'DoWalls', 0, 'WallPredictor', [], ...
+    'DoPedestrians', 0, 'PedestrianPredictor', [], 'DetInfo', []);
 args = parseargs(defaultArgs, varargin{:});
 
 
 %% Geometric context information
-geomContextInfo = load(fullfile(args.DbPath, imgInfo.geomContext.filename));
+geomContextInfo = args.GeomContextInfo;
+
+%% Shadows information
+bndInfo = args.BndInfo;
+shadowInfo = args.ShadowInfo;
+
+%% Pedestrian detection information
+detInfo = args.DetInfo;
 
 %% Do we need to estimate the horizon?
 if isempty(horizonLine)
@@ -39,10 +47,7 @@ else
 end
 
 %% Shadows
-if args.DoShadows
-    bndInfo = load(fullfile(args.DbPath, imgInfo.wseg25.filename));
-    shadowInfo = load(fullfile(args.DbPath, imgInfo.shadows.filename));
-    
+if args.DoShadows    
     if args.DoCueConfidence
         % keep all boundaries (strong)
 %         shadowBoundaries = bndInfo.boundaries(shadowInfo.indStrongBnd);
@@ -102,7 +107,6 @@ end
 %% Pedestrians
 if args.DoPedestrians
     % load object information
-    detInfo = load(fullfile(args.DbPath, imgInfo.detObjects.person.filename));
     [pedsData.probSun, pedsData.nb, allPedsProbSun] = estimateIlluminationFromPedestrians(img, args.PedestrianPredictor, ...
         detInfo.pObj, detInfo.pLocalVisibility, ...
         detInfo.pLocalLightingGivenObject, detInfo.pLocalLightingGivenNonObject, ...
