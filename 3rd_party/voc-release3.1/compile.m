@@ -6,8 +6,8 @@ mex -O features.cc
 % 1 is fastest, 3 is slowest 
 
 % 1) multithreaded convolution using blas
-mex -O fconvblas.cc -lmwblas -o fconv
+% mex -O fconvblas.cc -lmwblas -o fconv
 % 2) mulththreaded convolution without blas
-% mex -O fconvMT.cc -o fconv
+mex -O fconvMT.cc -o fconv
 % 3) basic convolution, very compatible
 % mex -O fconv.cc -o fconv
