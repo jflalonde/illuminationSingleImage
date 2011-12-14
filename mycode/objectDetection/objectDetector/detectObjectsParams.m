@@ -38,4 +38,6 @@ if args.Normalize && ~exist('normConf', 'var') && ~isempty(bbox);
 
     % save bounding boxes
     bbox = [bbox(:, 1:4), normConf];
+else
+    bbox = bbox(:, 1:4);
 end
