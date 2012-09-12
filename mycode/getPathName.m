@@ -12,36 +12,27 @@ function path = getPathName(str, varargin)
 % ----------
 % Jean-Francois Lalonde
 
-% get system-dependent hostname
-[d, host] = system('hostname');
+% use path to 'getPathName' to retrieve the base path
+basePath = fileparts(fileparts(fileparts(fileparts(fileparts(which('getPathName.m'))))));
 
-if isdeployed || (~isempty(strfind(lower(host), 'cmu')) && ...
-        isempty(strfind(lower(host), 'jf-mac'))) || ...
-        ~isempty(strfind(lower(host), 'compute'))
-    
-    % at CMU
-    basePath = '/nfs/hn01/jlalonde';
-    resultsBasePath = '/usr3/jlalonde/results';
-else
-    
-    % on my laptop
-    basePath = '/Users/jflalonde/Documents/research';   
-    resultsBasePath = fullfile(basePath, 'results');
-end
+resultsBasePath = fullfile(basePath, 'results');
+codeBasePath = fullfile(basePath, 'code', 'projects');
 
 projectName = 'illuminationSingleImage';
 
 if nargin == 0 || isempty(str)
     fprintf('Options: ''code'', ''codeUtils'', ''results'', ''data'', ''status'', ''logs''.\n');
-    path = '';
+    if nargout == 1
+        path = '';
+    end
 else
     
     switch(str)
         case 'code'
-            path = fullfile(basePath, 'code', 'projects', projectName);
+            path = fullfile(codeBasePath, projectName);
 
         case 'codeUtils'
-            path = fullfile(basePath, 'code', 'projects', 'utils');
+            path = fullfile(codeBasePath, 'utils');
         
         case 'results'
             path = fullfile(resultsBasePath, projectName);
@@ -50,7 +41,7 @@ else
             path = fullfile(basePath, 'data', projectName);
 
         case 'status'
-            path = fullfile(basePath, 'results', projectName, 'status');
+            path = fullfile(resultsBasePath, projectName, 'status');
             
         case 'logs'
             path = fullfile(basePath, 'logs');
