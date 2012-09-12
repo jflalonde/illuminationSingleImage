@@ -1,4 +1,6 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [sunAzimuth, horizonLine, wedgeAngle, isVisible, isValid, isGood] = ...
+    labelSunPositionFromObjectLabels(figHandle, focalLength, horizonLine, ...
+    imgWidth, imgHeight, objectBbox, sunAzimuth)
 % function sunAzimuth = labelSunPositionFromObjectLabels(figHandle, focalLength, horizonLine, imgWidth)
 %  Asks a user to estimate the relative sun position with respect to the
 %  camera.
@@ -11,15 +13,8 @@
 %
 % Output parameters:
 %  - sunAzimuth: azimuth of the sun (radians)
-%  
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [sunAzimuth, horizonLine, wedgeAngle, isVisible, isValid, isGood] = labelSunPositionFromObjectLabels(figHandle, focalLength, horizonLine, imgWidth, imgHeight, objectBbox, sunAzimuth)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Copyright 2010 Jean-Francois Lalonde
-% Carnegie Mellon University
-% Do not distribute
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 %% Default parameters
 % geometric
@@ -27,7 +22,7 @@ cameraHeight = 1.6;     % meters
 stickHeight = 1.7;      % meters
 pos3D = [0 0 -7.5]';    % initial position, meters
 sunZenith = pi/4;       % 45 degrees down from zenith
-if nargin < 6
+if nargin < 7
     % 90 degrees to the right
     sunAzimuth = pi/2;
 end
