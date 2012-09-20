@@ -1,4 +1,4 @@
-function im = color(input)
+function im = im2color(input)
 
 % im = color(input)
 % Convert input image to color.
