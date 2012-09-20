@@ -94,12 +94,13 @@ skyArea = nnz(skyMask(:))./numel(skyMask(:));
 
 % use gamma = 2.2
 gamma = 2.2;
-invRespFunction = repmat(linspace(0,1,1000)', 1, 3).^gamma;
-img = correctImage(img, invRespFunction, logical(skyMask));
+img = img.^(1/gamma);
+% invRespFunction = repmat(linspace(0,1,1000)', 1, 3).^gamma;
+% img = correctImage(img, invRespFunction, logical(skyMask));
 
 % extract up, vp, lp for all pixels above the horizon line
 imgxyY = rgb2xyY(img);
-[up, vp, lp, ind] = getFullSkyInfo(skyMask, imgxyY, img);
+[up, vp, lp] = getFullSkyInfo(skyMask, imgxyY, img);
 
 %% Optimize luminance over entire sky
 kOpt = [];

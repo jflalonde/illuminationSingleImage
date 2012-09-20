@@ -37,8 +37,10 @@ end
 
 %% Estimate illumination using sky
 if args.DoSky
+    fprintf('Estimating the sky cue...'); tstart = tic;
     [skyData.probSun, skyData.label, skyData.area] = estimateIlluminationFromSky(img, args.SkyPredictor, geomContextInfo.allSkyMask, geomContextInfo.segImage, ...
         focalLength, horizonLine, 'DoSkyClassif', args.DoSkyClassif, 'SkyDb', args.SkyDb);
+    fprintf('done in %.2fs\n', toc(tstart));
 else
     % uniform
     skyData.probSun = args.SkyPredictor.constantProb();
