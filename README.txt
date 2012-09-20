@@ -12,6 +12,8 @@ See function demoEstimateIllumination.m
 
 -- Requirements --
 
+MATLAB's optimization toolbox
+
 My 'utils' package, available on github:
     http://www.github.com/jflalonde/utils
 
