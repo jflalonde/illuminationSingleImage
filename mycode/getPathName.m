@@ -36,6 +36,9 @@ else
             
         case 'codeSkyModel'
             path = fullfile(codeBasePath, 'skyModel');
+            
+        case 'codeShadowDetection'
+            path = fullfile(codeBasePath, 'shadowDetection');
         
         case 'results'
             path = fullfile(resultsBasePath, projectName);

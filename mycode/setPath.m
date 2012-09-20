@@ -31,5 +31,6 @@ restoredefaultpath;
 
 %% Setup project paths
 addpath(genpath(pathMyCode));
+addpath(genpath(getPathName('codeShadowDetection')));
 addpath(genpath(pathUtils));
 addpath(genpath(path3rdParty));
