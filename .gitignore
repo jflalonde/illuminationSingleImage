@@ -1,4 +1,2 @@
-3rd_party/voc-release3.1/learn
-3rd_party/libsvm-mat-3.0-1/svm.o
-3rd_party/libsvm-mat-3.0-1/svm_model_matlab.o
+*.o
 .DS_Store
