@@ -22,6 +22,9 @@ My 'utils' package, available on github:
 My 'skyModel' package, available on github:
     http://www.github.com/jflalonde/skyModel
 
+My 'shadowDetection' package, available on github:
+    http://www.github.com/jflalonde/shadowDetection
+
 LibSVM (included in 3rd_party/libsvm-mat-3.0-1)
     see http://www.csie.ntu.edu.tw/~cjlin/libsvm
 
