@@ -37,6 +37,23 @@ geomContextInfo = load(fullfile(dataPath, 'geomContext.mat'));
 bndInfo = load(fullfile(dataPath, 'wseg25.mat'));
 shadowInfo = load(fullfile(dataPath, 'shadows.mat'));
 
+% Approximation to the focal length
+focalLength = size(img,2)*10/7;
+
+%% Load local illumination predictors
+lightingGivenNonObjectClassifier = SVMLightingClassifier('svm-4-51', 1);
+lightingGivenNonObjectClassifier = lightingGivenNonObjectClassifier.initialize();
+
+classifPath = fullfile('data', 'localLightingClassifiers');
+
+lightingGivenObjectClassifier = load(fullfile(classifPath, 'lighting', ...
+    'pLocalGivenFeatures-person-4classes-10.mat'));
+
+% local visibility predictor (shadow vs sunlit)
+pLocalVisibilityInfo = load(fullfile(classifPath, 'visibility', ...
+    'pLocalGivenFeatures-person-3classes-5.mat'));
+
+
 %% First, run the sun visibility classifier
 fprintf('Computing probability that sun is visible...\n');
 
@@ -72,17 +89,22 @@ pedsPredictor = PedestrianIlluminationPredictor('Verbose', verbose, ...
 pedsPredictor = pedsPredictor.initialize();
 
 %% Detect pedestrians
+fprintf('Running pedestrian detector...');
 objectDetectorInfo = load(objectDetectorPath);
 boxes = detectObjectsParams(img, objectDetectorInfo);
+fprintf('done.\n');
+
+detInfo = [];
 
 %% Estimate the illumination
 [probSun, skyData, shadowsData, wallsData, pedsData] = ...
     estimateIllumination(img, focalLength, [], ...
     'DoVote', 1, ...
     'GeomContextInfo', geomContextInfo, ...
-    'DoSky', doSky, 'SkyPredictor', skyPredictor, 'DoSkyClassif', doSkyClassif, 'SkyDb', skyDb, ...
-    'DoShadows', doShadows, 'ShadowsPredictor', shadowsPredictor, 'BndInfo', bndInfo, 'ShadowInfo', shadowInfo, ...
-    'DoWalls', doWalls, 'WallPredictor', wallPredictor, ...
-    'DoPedestrians', doPedestrians, 'PedestrianPredictor', pedsPredictor, 'DetInfo', detInfo);
+    'DoSky', 1, 'SkyPredictor', skyPredictor, 'DoSkyClassif', doSkyClassif, 'SkyDb', skyDb, ...
+    'DoShadows', 0, 'ShadowsPredictor', shadowsPredictor, 'BndInfo', bndInfo, 'ShadowInfo', shadowInfo, ...
+    'DoWalls', 1, 'WallPredictor', wallPredictor, ...
+    'DoPedestrians', 0, 'PedestrianPredictor', pedsPredictor, 'DetInfo', detInfo);
+
 
 %% Display some results
