@@ -37,7 +37,7 @@ end
 
 %% Estimate illumination using sky
 if args.DoSky
-    fprintf('Estimating the sky cue...'); tstart = tic;
+    fprintf('Estimating illumination from the sky...'); tstart = tic;
     [skyData.probSun, skyData.label, skyData.area] = estimateIlluminationFromSky(img, args.SkyPredictor, geomContextInfo.allSkyMask, geomContextInfo.segImage, ...
         focalLength, horizonLine, 'DoSkyClassif', args.DoSkyClassif, 'SkyDb', args.SkyDb);
     fprintf('done in %.2fs\n', toc(tstart));
@@ -97,10 +97,13 @@ end
 
 %% Walls
 if args.DoWalls
+    fprintf('Estimating illumination from the vertical surfaces...'); 
+    tstart = tic;
     % geom context is flipped wrt our convention: left <-> right
     [wallsData.probSun, wallsData.area, allWallsProbSun] = estimateIlluminationFromWalls(img, args.WallPredictor, ...
         geomContextInfo.wallRight, geomContextInfo.wallFacing, geomContextInfo.wallLeft, ...
         'DoVote', args.DoVote, 'DoWeightVote', args.DoWeightVote, 'DoCueConfidence', args.DoCueConfidence);
+    fprintf('done in %.2fs\n', toc(tstart));
 else
     wallsData.probSun = args.WallPredictor.constantProb();
     wallsData.area = 0;
