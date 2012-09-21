@@ -6,12 +6,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear global;
-global logFileRoot;
+% global logFileRoot;
 
 % host-dependent paths
 [a, host] = system('hostname');
 
-logFileRoot = getPathName('logs');
+% logFileRoot = getPathName('logs');
 path3rdParty = getPathName('code', '3rd_party');
 pathMyCode = getPathName('code', 'mycode');
 pathUtils = getPathName('codeUtils');
@@ -31,6 +31,7 @@ restoredefaultpath;
 
 %% Setup project paths
 addpath(genpath(pathMyCode));
+addpath(genpath(getPathName('codeSkyModel')));
 addpath(genpath(getPathName('codeShadowDetection')));
 addpath(genpath(pathUtils));
 addpath(genpath(path3rdParty));
