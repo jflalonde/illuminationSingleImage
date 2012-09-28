@@ -31,7 +31,7 @@ if nargin < 9
 end
 
 % we assume color images
-input = color(input);
+input = im2color(input);
 
 % prepare model for convolutions
 rootfilters = [];
