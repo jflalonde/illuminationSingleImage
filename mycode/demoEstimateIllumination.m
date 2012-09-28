@@ -145,7 +145,15 @@ detInfo = struct('pObj', pObj, 'pLocalVisibility', pLocalVisibility, ...
     'DoPedestrians', 1, 'PedestrianPredictor', pedsPredictor, 'DetInfo', detInfo);
 
 %% Load the prior, and combine with the data term
+priorPath = fullfile('data', 'illuminationPriors', 'gpsAndTimeJoint-1000000.mat');
+illPrior = load(priorPath);
 
+c = linspace(0, pi/2, nbZenithBins*2+1); c = c(2:2:end);
+illPrior = interp1(linspace(0, pi/2, size(illPrior.priorSunPositionDist, 1)), sum(illPrior.priorSunPositionDist, 2), c);
+illPrior = repmat(illPrior(:), [1 nbAzimuthBins]); 
+
+probSun = probSun .* illPrior;
+probSun = probSun ./ sum(probSun(:));
 
 %% Display some results
 figure;
@@ -156,7 +164,7 @@ axesId = displayResult(axesId, skyData.probSun, 'Sky only');
 axesId = displayResult(axesId, shadowsData.probSun, 'Shadows only');
 axesId = displayResult(axesId, wallsData.probSun, 'Vertical surfaces only');
 axesId = displayResult(axesId, pedsData.probSun, 'Pedestrians only');
-axesId = displayResult(axesId, pedsData.probSun, 'Prior');
+axesId = displayResult(axesId, illPrior, 'Prior');
 displayResult(axesId, probSun, 'Combined');
 
     % helper function for displaying individual results
