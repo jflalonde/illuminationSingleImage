@@ -105,6 +105,31 @@ detInfo = [];
     'DoShadows', 0, 'ShadowsPredictor', shadowsPredictor, 'BndInfo', bndInfo, 'ShadowInfo', shadowInfo, ...
     'DoWalls', 1, 'WallPredictor', wallPredictor, ...
     'DoPedestrians', 0, 'PedestrianPredictor', pedsPredictor, 'DetInfo', detInfo);
+%% Load the prior, and combine with the data term
 
 
 %% Display some results
+figure;
+nrows = 1; ncols = 6;
+axesId = 1;
+
+axesId = displayResult(axesId, skyData.probSun, 'Sky only');
+axesId = displayResult(axesId, shadowsData.probSun, 'Shadows only');
+axesId = displayResult(axesId, wallsData.probSun, 'Vertical surfaces only');
+axesId = displayResult(axesId, pedsData.probSun, 'Pedestrians only');
+axesId = displayResult(axesId, pedsData.probSun, 'Prior');
+displayResult(axesId, probSun, 'Combined');
+
+    % helper function for displaying individual results
+    function axesId = displayResult(axesId, probSun, titleStr)
+        displaySunProbabilityVectorized(probSun, 1, 'Axes', ...
+            subplot_tight(nrows, ncols, axesId));
+        % for some reason, 'title' messes things up, so just place the text
+        % directly
+        text(0.5, 1.1, titleStr, 'HorizontalAlignment', 'center');
+        axesId = axesId + 1;
+    end
+
+end
+
+
