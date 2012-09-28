@@ -19,9 +19,9 @@ Requirements
 * My [utils package](http://www.github.com/jflalonde/utils), [available on github];
 * My [skyModel](http://www.github.com/jflalonde/skyModel) package, available on github;
 * My [shadowDetection](http://www.github.com/jflalonde/shadowDetection) package, available on github;
-* [LibSVM](http://www.csie.ntu.edu.tw/~cjlin/libsvm) (included in 3rd_party/libsvm-mat-3.0-1);
-* [Felzenszwalb et al. object detector](http://www.cs.uchicago.edu/~pff/latent) [1] (included in 3rd_party/voc-release3.1);
-* [Piotr Dollar's image processing toolbox](http://vision.ucsd.edu/~pdollar/toolbox/doc/) (included in 3rd_party/piotr_toolbox)
+* [LibSVM](http://www.csie.ntu.edu.tw/~cjlin/libsvm), included in `3rd_party/libsvm-mat-3.0-1`;
+* [Felzenszwalb et al. object detector](http://www.cs.uchicago.edu/~pff/latent) [1], included in `3rd_party/voc-release3.1`;
+* [Piotr Dollar's image processing toolbox](http://vision.ucsd.edu/~pdollar/toolbox/doc/), included in `3rd_party/piotr_toolbox`.
 
 Compilation
 ===========
