@@ -1,3 +1,4 @@
 *.mexmaci64
 *.o
 .DS_Store
+*~
