@@ -41,16 +41,16 @@ shadowInfo = load(fullfile(dataPath, 'shadows.mat'));
 focalLength = size(img,2)*10/7;
 
 %% Load local illumination predictors
-lightingGivenNonObjectClassifier = SVMLightingClassifier('svm-4-51', 1);
-lightingGivenNonObjectClassifier = lightingGivenNonObjectClassifier.initialize();
-
-classifPath = fullfile('data', 'localLightingClassifiers');
+classifPath = fullfile('data', 'localIlluminationClassifiers');
 
 lightingGivenObjectClassifier = load(fullfile(classifPath, 'lighting', ...
     'pLocalGivenFeatures-person-4classes-10.mat'));
 
+lightingGivenNonObjectClassifier = load(fullfile(classifPath, 'lighting', ...
+    'pLocalGivenFeatures-nonPerson-4classes-10.mat'));
+
 % local visibility predictor (shadow vs sunlit)
-pLocalVisibilityInfo = load(fullfile(classifPath, 'visibility', ...
+localVisibilityClassifier = load(fullfile(classifPath, 'visibility', ...
     'pLocalGivenFeatures-person-3classes-5.mat'));
 
 
@@ -61,7 +61,7 @@ fprintf('Computing probability that sun is visible...\n');
 sunVisibilityClassifierInfo = load(sunVisibilityPath);
 
 % Predict the sun visibility
-[vis, prob] = predictSunVisibility(img, sunVisibilityClassifierInfo, ...
+[~, prob] = predictSunVisibility(img, sunVisibilityClassifierInfo, ...
     geomContextInfo, bndInfo, shadowInfo);
 
 fprintf('Probability that sun is visible: %.2f.\n', prob(2));
@@ -91,12 +91,50 @@ pedsPredictor = pedsPredictor.initialize();
 %% Detect pedestrians
 fprintf('Running pedestrian detector...');
 objectDetectorInfo = load(objectDetectorPath);
-boxes = detectObjectsParams(img, objectDetectorInfo);
+boxes = detectObjectsParams(img, objectDetectorInfo, 'Normalize', 1);
 fprintf('done.\n');
 
-detInfo = [];
+%% Compute local lighting probabilities for all detections
+nbObjects = size(boxes, 1);
+
+% We need:
+% - pObj: probability of object (from the normalized object detector)
+% - pLocalVisibility: probability that object has sun directly shining on it
+% - pLocalLightingGivenObject: probability of sun position given that the 
+%   detection is an actual pedestrian
+% - pLocalLightingGivenNonObject: probability of sun position given that
+%   the detection is _not_ a pedestrian.
+pObj = [1-boxes(:,end), boxes(:, end)];
+pLocalVisibility = zeros(nbObjects, 2);
+pLocalLightingGivenObject = zeros(nbObjects, 4);
+pLocalLightingGivenNonObject = zeros(nbObjects, 4);
+for i_obj = 1:nbObjects
+    % compute visibility features (shadow vs sunlit) 
+    visibilityFeatures = computeLocalVisibilityFeatures(img, boxes(i_obj,:), ...
+        'GIST', 1, 'SmallImg', 1, 'HSVHistogram', 1);
+    
+    % run local visibility classifier
+    pLocalVisibility(i_obj,:) = applyLocalClassifier(visibilityFeatures, ...
+        localVisibilityClassifier);
+    
+    % compute local lighting features (sun direction)
+    lightingFeatures = computeLocalLightingFeatures(img, boxes(i_obj,:), ...
+        'HOG', 1);
+        
+    % run local lighting classifier
+    pLocalLightingGivenObject(i_obj,:) = applyLocalClassifier(lightingFeatures, ...
+        lightingGivenObjectClassifier);
+
+    % run local lighting classifier
+    pLocalLightingGivenNonObject(i_obj,:) = applyLocalClassifier(lightingFeatures, ...
+        lightingGivenNonObjectClassifier.lightingGivenNonObjectClassifier);
+end
 
 %% Estimate the illumination
+detInfo = struct('pObj', pObj, 'pLocalVisibility', pLocalVisibility, ...
+    'pLocalLightingGivenObject', pLocalLightingGivenObject, ...
+    'pLocalLightingGivenNonObject', pLocalLightingGivenNonObject);
+
 [probSun, skyData, shadowsData, wallsData, pedsData] = ...
     estimateIllumination(img, focalLength, [], ...
     'DoVote', 1, ...
@@ -104,7 +142,8 @@ detInfo = [];
     'DoSky', 1, 'SkyPredictor', skyPredictor, 'DoSkyClassif', doSkyClassif, 'SkyDb', skyDb, ...
     'DoShadows', 0, 'ShadowsPredictor', shadowsPredictor, 'BndInfo', bndInfo, 'ShadowInfo', shadowInfo, ...
     'DoWalls', 1, 'WallPredictor', wallPredictor, ...
-    'DoPedestrians', 0, 'PedestrianPredictor', pedsPredictor, 'DetInfo', detInfo);
+    'DoPedestrians', 1, 'PedestrianPredictor', pedsPredictor, 'DetInfo', detInfo);
+
 %% Load the prior, and combine with the data term
 
 
