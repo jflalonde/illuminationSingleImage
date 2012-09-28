@@ -19,7 +19,7 @@ function displaySunProbabilityVectorized(latLongMap, alignHistogramAzimuths, var
 defaultArgs = struct('DrawCameraFrame', 0, 'FocalLength', 0, 'CamZenith', 0, 'ImgDims', [], ...
     'GtSunZenith', [], 'GtSunAzimuth', [], ...
     'EstSunZenith', [], 'EstSunAzimuth', [], ...
-    'DrawFlipped', 0, 'Normalize', 0);
+    'DrawFlipped', 0, 'Normalize', 0, 'Axes', []);
 args = parseargs(defaultArgs, varargin{:});
 
 %% 
@@ -43,7 +43,8 @@ for a=1:size(latLongMap, 2)
 end
 
 %% warp patches to "sky angular" view
-h = figure; hold on;
+% h = figure; hold on;
+hold on;  
 for i=1:length(allPatches)
     patchPhi = allPatches{i}(1,:);
     patchTheta = allPatches{i}(2,:);
@@ -72,13 +73,15 @@ for i=1:length(allPatches)
 
 end
 
-axis equal off;
-set(h, 'Color', 'none');
-set(gca(h), 'Color', 'none');
-if args.Normalize
-    set(gca(h), 'Clim', [0 1]);
+if ~isempty(args.Axes)
+    axis(args.Axes, 'equal', 'off');
+%     set(h, 'Color', 'none');
+    set(args.Axes, 'Color', 'none');
+    if args.Normalize
+        set(args.Axes, 'Clim', [0 1]);
+    end
+%     colormap(jet(1024));
 end
-colormap(jet(1024));
 
 
 %% Draw camera frame
