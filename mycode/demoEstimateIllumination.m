@@ -143,7 +143,7 @@ camZenith = pi/2-atan2(size(img,1)/2-horizonLine, focalLength);
 
 % Display the individual and combined probability maps (as in Fig. 11 of
 % the IJCV paper)
-figure;
+figure(1);
 nrowsFig = 1; ncolsFig = 6;
 axesId = 1;
 
@@ -165,4 +165,17 @@ displaySingleProbMap(axesId, probSun, focalLength, camZenith, ...
 [~,~,sunAzimuths] = angularHistogram([], nbAzimuthBins, alignHistogram);
 [mlZenith, mlAzimuth] = getMLSun(probSun, sunAzimuths);
 
-drawSunDialFromSunPosition(img, [mlZenith mlAzimuth], horizonLine, focalLength);
+h = figure(2); clf;
+imshow(img);
+ax = get(h, 'CurrentAxes');
+
+% draw horizon line
+line([0 size(img,2)], horizonLine.*[1 1], 'Color', 'r', 'LineWidth', 3, 'LineStyle', '--', ...
+    'Parent', ax);
+
+% draw sun dial
+drawSunDialFromSunPosition(img, [mlZenith mlAzimuth], horizonLine, focalLength, ...
+    'CameraHeight', 1.2, 'StickHeight', 1, 'Axes', ax);
+
+title('Inserted sun dial');
+legend('Estimated horizon line');
