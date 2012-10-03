@@ -69,19 +69,19 @@ if args.DoSkyClassif
     switch skyLabel
         case 1
             % sky is clear, fit on entire sky
-            fprintf('Sky is clear...\n');
+            fprintf('Sky is clear...');
             skyLabel = 'clear';
             
         case 2
             % patchy clouds. Segment first
-            fprintf('Sky is patchy...\n');
+            fprintf('Sky is patchy...');
             skyLabel = 'patchy';
             skySeg = imageBasedCloudSegmentation(img, skyMask);
             skyMask = skyMask.*skySeg;
             
         case 3 % can't be overcast!
             % overcast. Can't fit our model
-            fprintf('Sky is overcast...\n');
+            fprintf('Sky is overcast...');
             skyLabel = 'overcast';
             illProb = skyPredictor.constantProb();
             return;

@@ -45,6 +45,7 @@ end
 
 %% Shadows
 if args.DoShadows    
+    fprintf('Estimating illumination from ground shadows...'); tstart = tic;
     if args.DoCueConfidence
         % keep all boundaries (strong)
 %         shadowBoundaries = bndInfo.boundaries(shadowInfo.indStrongBnd);
@@ -57,7 +58,7 @@ if args.DoShadows
     end
     
     % force the ground to be zero below the horizon
-    [m,mind] = max(cat(3, geomContextInfo.allGroundMask, geomContextInfo.allSkyMask, geomContextInfo.allWallsMask), [], 3);
+    [~,mind] = max(cat(3, geomContextInfo.allGroundMask, geomContextInfo.allSkyMask, geomContextInfo.allWallsMask), [], 3);
     groundMask = imdilate(mind==1, strel('disk', 3));
     groundMask(1:ceil(horizonLine+1),:) = 0;
     
@@ -85,6 +86,7 @@ if args.DoShadows
         shadowsData.probSun = args.ShadowsPredictor.constantProb();
         shadowsData.lines = [];
     end
+    fprintf('done in %.2fs\n', toc(tstart));
 else
     shadowsData.probSun = args.ShadowsPredictor.constantProb();
     shadowsData.lines = [];
@@ -95,7 +97,7 @@ if args.DoWalls
     fprintf('Estimating illumination from the vertical surfaces...'); 
     tstart = tic;
     % geom context is flipped wrt our convention: left <-> right
-    [wallsData.probSun, wallsData.area, allWallsProbSun] = estimateIlluminationFromWalls(img, args.WallPredictor, ...
+    [wallsData.probSun, wallsData.area] = estimateIlluminationFromWalls(img, args.WallPredictor, ...
         geomContextInfo.wallRight, geomContextInfo.wallFacing, geomContextInfo.wallLeft, ...
         'DoVote', args.DoVote, 'DoWeightVote', args.DoWeightVote, 'DoCueConfidence', args.DoCueConfidence);
     fprintf('done in %.2fs\n', toc(tstart));
