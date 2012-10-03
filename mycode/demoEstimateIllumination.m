@@ -176,20 +176,21 @@ nrowsFig = 1; ncolsFig = 6;
 axesId = 1;
 
 axesId = displaySingleProbMap(axesId, skyData.probSun, focalLength, camZenith, ...
-    imgDims, nrowsFig, ncolsFig, 'Sky only');
+    imgDims, nbAzimuthBins, alignHistogram, [], nrowsFig, ncolsFig, 'Sky only');
 axesId = displaySingleProbMap(axesId, shadowsData.probSun, focalLength, camZenith, ...
-    imgDims, nrowsFig, ncolsFig, 'Shadows only');
+    imgDims, nbAzimuthBins, alignHistogram, pi/4, nrowsFig, ncolsFig, 'Shadows only');
 axesId = displaySingleProbMap(axesId, wallsData.probSun, focalLength, camZenith, ...
-    imgDims, nrowsFig, ncolsFig, 'Vertical surfaces only');
+    imgDims, nbAzimuthBins, alignHistogram, pi/4, nrowsFig, ncolsFig, 'Vertical surfaces only');
 axesId = displaySingleProbMap(axesId, pedsData.probSun, focalLength, camZenith, ...
-    imgDims, nrowsFig, ncolsFig, 'Pedestrians only');
+    imgDims, nbAzimuthBins, alignHistogram, pi/4, nrowsFig, ncolsFig, 'Pedestrians only');
 axesId = displaySingleProbMap(axesId, illPrior, focalLength, camZenith, ...
-    imgDims, nrowsFig, ncolsFig, 'Prior');
+    imgDims, [], [], [], nrowsFig, ncolsFig, 'Prior');
 displaySingleProbMap(axesId, probSun, focalLength, camZenith, ...
-    imgDims, nrowsFig, ncolsFig, 'Combined');
+    imgDims, nbAzimuthBins, alignHistogram, [], nrowsFig, ncolsFig, 'Combined');
 
 % Find the maximum likelihood sun position, and insert a "virtual sun dial"
 % in the image
+[~,~,sunAzimuths] = angularHistogram([], nbAzimuthBins, alignHistogram);
+[mlZenith, mlAzimuth] = getMLSun(probSun, sunAzimuths);
 
-
-
+drawSunDialFromSunPosition(img, [mlZenith mlAzimuth], horizonLine, focalLength);
