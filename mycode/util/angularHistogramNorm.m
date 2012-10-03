@@ -7,7 +7,7 @@
 %   
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [angularHist, histInd, binCenters, binEdges] = angularHistogramNorm(angles, nbBins)
+function [angularHist, histInd, binCenters, binEdges] = angularHistogramNorm(angles, nbBins, weights)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Copyright 2006-2010 Jean-Francois Lalonde
 % Carnegie Mellon University
@@ -16,7 +16,12 @@ function [angularHist, histInd, binCenters, binEdges] = angularHistogramNorm(ang
 
 % quantize
 binEdges = linspace(-pi, pi, 2*nbBins+1); binEdges(end) = binEdges(end)+2*eps;
-[h, binInd] = histc(angles, binEdges);
+
+if exist('weights', 'var')
+    [h, binInd] = whistc(angles, weights, binEdges);
+else
+    [h, binInd] = histc(angles, binEdges);
+end
 
 % concatenate first and last together
 binsIndCat = 1:2*nbBins;
