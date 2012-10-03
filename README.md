@@ -11,8 +11,8 @@ Getting started
 
 1. First, make sure you download the required software packages described below.
 2. From the MATLAB command prompt in the `mycode` directory, run
-    `setPath`
-    `demoEstimateIllumination`
+    $ setPath
+    $ demoEstimateIllumination
 3. Results should display automagically!
 
 
