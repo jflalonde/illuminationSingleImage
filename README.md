@@ -9,7 +9,14 @@ Journal of Computer Vision, vol. 98, no. 2, pp. 123--145, Jun. 2012.
 *** THIS IS NOT YET FULLY-FUNCTIONAL! USE AT YOUR OWN RISK! ***
 
 
-See function demoEstimateIllumination.m
+Getting started
+===============
+
+1. First, make sure you download the required software packages described below.
+2. From the MATLAB command prompt in the `mycode` directory, run
+    `setPath`
+    `demoEstimateIllumination`
+3. Results should display automagically!
 
 
 Requirements
@@ -26,14 +33,15 @@ Requirements
 * [Piotr Dollar's image processing toolbox](http://vision.ucsd.edu/~pdollar/toolbox/doc/), included in `3rd_party/piotr_toolbox`.
 * [Video Compass code from Derek Hoiem](http://www.cs.illinois.edu/homes/dhoiem/), included in `3rd_party/hoiemVideoCompass`;
 
+
 Compilation
 ===========
 
 Compile the object detector: 
-* go to 3rd_party/voc-release3.1 from inside matlab, and run 'compile'
+* go to `3rd_party/voc-release3.1` from inside matlab, and run 'compile'
 
 Compile the lib-svm
-* go to 3rd_party/libsvm-mat-3.0-1 from inside matlab, and run 'make'
+* go to `3rd_party/libsvm-mat-3.0-1` from inside matlab, and run 'make'
 
 This has been tested with matlab version XXX or greater
 * TODO: get CMU's matlab version
@@ -45,6 +53,13 @@ Information needed
 * geometric context results (see )
 * detected ground shadow boundaries (see ).
 * pedestrian detector (see ).
+
+Notes
+=====
+
+By default, this code uses the ICCV'09 version to estimate the probability 
+of the sun given the sky cue, my previous implementation seems to give better
+results. 
 
 
 References
