@@ -11,7 +11,7 @@ function [probSun, skyData, shadowsData, wallsData, pedsData] = ...
 % Jean-Francois Lalonde
 
 % parse arguments
-defaultArgs = struct('DoEstimateHorizon', 0, 'DoVote', 0, 'DoWeightVote', 0, 'DoCueConfidence', 0, ...
+defaultArgs = struct('DoVote', 0, 'DoWeightVote', 0, 'DoCueConfidence', 0, ...
     'GeomContextInfo', [], ...
     'DoSky', 0, 'SkyPredictor', [], 'DoSkyClassif', 0, 'SkyDb', [], ...
     'DoShadows', 0, 'ShadowsPredictor', [], 'BndInfo', [], 'ShadowInfo', [], ...
@@ -29,11 +29,6 @@ shadowInfo = args.ShadowInfo;
 
 %% Pedestrian detection information
 detInfo = args.DetInfo;
-
-%% Do we need to estimate the horizon?
-if isempty(horizonLine)
-    horizonLine = horizonFromGeometricContext(geomContextInfo.allSkyMask>0.5, geomContextInfo.allGroundMask>0.5);
-end
 
 %% Estimate illumination using sky
 if args.DoSky

@@ -40,6 +40,9 @@ shadowInfo = load(fullfile(dataPath, 'shadows.mat'));
 % Approximation to the focal length
 focalLength = size(img,2)*10/7;
 
+% We'll estimate the horizon line later...
+horizonLine = [];
+
 %% Load local illumination predictors
 classifPath = fullfile('data', 'localIlluminationClassifiers');
 
@@ -130,13 +133,18 @@ for i_obj = 1:nbObjects
         lightingGivenNonObjectClassifier.lightingGivenNonObjectClassifier);
 end
 
+%% Estimate the horizon line
+if isempty(horizonLine)
+    horizonLine = horizonFromGeometricContext(geomContextInfo.allSkyMask>0.5, geomContextInfo.allGroundMask>0.5);
+end
+
 %% Estimate the illumination
 detInfo = struct('pObj', pObj, 'pLocalVisibility', pLocalVisibility, ...
     'pLocalLightingGivenObject', pLocalLightingGivenObject, ...
     'pLocalLightingGivenNonObject', pLocalLightingGivenNonObject);
 
 [probSun, skyData, shadowsData, wallsData, pedsData] = ...
-    estimateIllumination(img, focalLength, [], ...
+    estimateIllumination(img, focalLength, horizonLine, ...
     'DoVote', 1, ...
     'GeomContextInfo', geomContextInfo, ...
     'DoSky', doSky, 'SkyPredictor', skyPredictor, 'DoSkyClassif', doSkyClassif, 'SkyDb', skyDb, ...
