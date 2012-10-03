@@ -6,9 +6,6 @@ Illumination Conditions from a Single Outdoor Image," International
 Journal of Computer Vision, vol. 98, no. 2, pp. 123--145, Jun. 2012.
 
 
-*** THIS IS NOT YET FULLY-FUNCTIONAL! USE AT YOUR OWN RISK! ***
-
-
 Getting started
 ===============
 
@@ -24,14 +21,20 @@ Requirements
 
 * MATLAB's optimization toolbox
 
-* My [utils package](http://www.github.com/jflalonde/utils), available on github;
-* My [skyModel](http://www.github.com/jflalonde/skyModel) package, available on github;
-* My [shadowDetection](http://www.github.com/jflalonde/shadowDetection) package, available on github;
+Requires some of my software packages (available on github):
+* My [utils](http://www.github.com/jflalonde/utils) package;
+* My [skyModel](http://www.github.com/jflalonde/skyModel) package;
+* My [shadowDetection](http://www.github.com/jflalonde/shadowDetection) package;
 
+Requires the following 3rd-party libs (included):
 * [LibSVM](http://www.csie.ntu.edu.tw/~cjlin/libsvm), included in `3rd_party/libsvm-mat-3.0-1`;
 * [Felzenszwalb et al. object detector](http://www.cs.uchicago.edu/~pff/latent) [1], included in `3rd_party/voc-release3.1`;
 * [Piotr Dollar's image processing toolbox](http://vision.ucsd.edu/~pdollar/toolbox/doc/), included in `3rd_party/piotr_toolbox`.
 * [Video Compass code from Derek Hoiem](http://www.cs.illinois.edu/homes/dhoiem/), included in `3rd_party/hoiemVideoCompass`;
+
+For the paths to work "out of the box", create yourself a base directory 
+(e.g. `projects`), and download all of the packages in that directory. The 
+`setPath` function should be able to find them.
 
 
 Compilation
@@ -43,16 +46,13 @@ Compile the object detector:
 Compile the lib-svm
 * go to `3rd_party/libsvm-mat-3.0-1` from inside matlab, and run 'make'
 
-This has been tested with matlab version XXX or greater
-* TODO: get CMU's matlab version
-
 Information needed 
 ------------------
 
-* focal length (can be obtained from EXIF)
-* geometric context results (see )
-* detected ground shadow boundaries (see ).
-* pedestrian detector (see ).
+* focal length (can be obtained from EXIF);
+* geometric context results, code available from [Derek Hoiem's website](http://www.cs.illinois.edu/homes/dhoiem);
+* detected ground shadow boundaries, code available from [my website](http://www.jflalonde.org/software.html).
+
 
 Notes
 =====
