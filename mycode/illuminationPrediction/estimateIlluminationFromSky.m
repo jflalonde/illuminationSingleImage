@@ -43,7 +43,7 @@ if args.DoSkyClassif
     imgVec = reshape(img, size(img,1)*size(img,2), 3);
     meanSkyColor = mean(imgVec(skyMask, :), 1);
     
-    if all(meanSkyColor > 250)
+    if any(meanSkyColor > 254/255)
         fprintf('Sky is saturated!\n');
         skyLabel = 'saturated';
         
@@ -94,7 +94,7 @@ skyArea = nnz(skyMask(:))./numel(skyMask(:));
 
 % use gamma = 2.2
 gamma = 2.2;
-img = img.^(1/gamma);
+% img = img.^(1/gamma);
 % invRespFunction = repmat(linspace(0,1,1000)', 1, 3).^gamma;
 % img = correctImage(img, invRespFunction, logical(skyMask));
 
