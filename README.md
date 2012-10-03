@@ -5,6 +5,7 @@ J.-F. Lalonde, A. A. Efros, and S. G. Narasimhan, "Estimating the Natural
 Illumination Conditions from a Single Outdoor Image," International 
 Journal of Computer Vision, vol. 98, no. 2, pp. 123--145, Jun. 2012.
 
+Please cite this paper if you use this code in your work.
 
 Getting started
 ===============
