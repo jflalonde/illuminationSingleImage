@@ -164,27 +164,32 @@ probSun = probSun .* illPrior;
 probSun = probSun ./ sum(probSun(:));
 
 %% Display some results
+[nrows, ncols, ~] = size(img);
+imgDims = [nrows ncols];
+
+camZenith = pi/2-atan2(size(img,1)/2-horizonLine, focalLength);
+
+% Display the individual and combined probability maps (as in Fig. 11 of
+% the IJCV paper)
 figure;
-nrows = 1; ncols = 6;
+nrowsFig = 1; ncolsFig = 6;
 axesId = 1;
 
-axesId = displayResult(axesId, skyData.probSun, 'Sky only');
-axesId = displayResult(axesId, shadowsData.probSun, 'Shadows only');
-axesId = displayResult(axesId, wallsData.probSun, 'Vertical surfaces only');
-axesId = displayResult(axesId, pedsData.probSun, 'Pedestrians only');
-axesId = displayResult(axesId, illPrior, 'Prior');
-displayResult(axesId, probSun, 'Combined');
+axesId = displaySingleProbMap(axesId, skyData.probSun, focalLength, camZenith, ...
+    imgDims, nrowsFig, ncolsFig, 'Sky only');
+axesId = displaySingleProbMap(axesId, shadowsData.probSun, focalLength, camZenith, ...
+    imgDims, nrowsFig, ncolsFig, 'Shadows only');
+axesId = displaySingleProbMap(axesId, wallsData.probSun, focalLength, camZenith, ...
+    imgDims, nrowsFig, ncolsFig, 'Vertical surfaces only');
+axesId = displaySingleProbMap(axesId, pedsData.probSun, focalLength, camZenith, ...
+    imgDims, nrowsFig, ncolsFig, 'Pedestrians only');
+axesId = displaySingleProbMap(axesId, illPrior, focalLength, camZenith, ...
+    imgDims, nrowsFig, ncolsFig, 'Prior');
+displaySingleProbMap(axesId, probSun, focalLength, camZenith, ...
+    imgDims, nrowsFig, ncolsFig, 'Combined');
 
-    % helper function for displaying individual results
-    function axesId = displayResult(axesId, probSun, titleStr)
-        displaySunProbabilityVectorized(probSun, 1, 'Axes', ...
-            subplot_tight(nrows, ncols, axesId));
-        % for some reason, 'title' messes things up, so just place the text
-        % directly
-        text(0.5, 1.1, titleStr, 'HorizontalAlignment', 'center');
-        axesId = axesId + 1;
-    end
+% Find the maximum likelihood sun position, and insert a "virtual sun dial"
+% in the image
 
-end
 
 

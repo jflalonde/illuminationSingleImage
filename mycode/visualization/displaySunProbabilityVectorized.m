@@ -127,7 +127,7 @@ if args.DrawCameraFrame
 %     uAngular = uAngular.*500;
 %     vAngular = (1-vAngular).*500;
 
-    plot(uAngular', vAngular', 'k-', 'LineWidth', 4);
+    plot(uAngular', vAngular', 'k-', 'LineWidth', 3);
 end
 
 %% Ground truth sun position
