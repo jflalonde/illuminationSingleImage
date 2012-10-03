@@ -74,64 +74,28 @@ nbZenithBins = 5;
 nbAzimuthBins = 32;
 alignHistogram = 1;
 
-skyPredictor = SkyIlluminationPredictor('Verbose', verbose, ...
+skyPredictor = SkyIlluminationPredictor(...
    'NbAzimuthBins', nbAzimuthBins, 'NbZenithBins', nbZenithBins, ...
    'AlignHistogram', alignHistogram);
 skyPredictor = skyPredictor.initialize();
 
-shadowsPredictor = ShadowsIlluminationPredictor('Verbose', verbose, ...
+shadowsPredictor = ShadowsIlluminationPredictor(...
    'NbAzimuthBins', nbAzimuthBins, 'AlignHistogram', alignHistogram);
 shadowsPredictor = shadowsPredictor.initialize();
 
-wallPredictor = WallIlluminationPredictor('Verbose', verbose, ...
+wallPredictor = WallIlluminationPredictor(...
    'NbAzimuthBins', nbAzimuthBins, 'AlignHistogram', alignHistogram);
 wallPredictor = wallPredictor.initialize();
 
-pedsPredictor = PedestrianIlluminationPredictor('Verbose', verbose, ...
+pedsPredictor = PedestrianIlluminationPredictor(...
    'NbAzimuthBins', nbAzimuthBins, 'AlignHistogram', alignHistogram);
 pedsPredictor = pedsPredictor.initialize();
 
 %% Detect pedestrians
-fprintf('Running pedestrian detector...');
+fprintf('Running pedestrian detector...'); tstart = tic;
 objectDetectorInfo = load(objectDetectorPath);
 boxes = detectObjectsParams(img, objectDetectorInfo, 'Normalize', 1);
-fprintf('done.\n');
-
-%% Compute local lighting probabilities for all detections
-nbObjects = size(boxes, 1);
-
-% We need:
-% - pObj: probability of object (from the normalized object detector)
-% - pLocalVisibility: probability that object has sun directly shining on it
-% - pLocalLightingGivenObject: probability of sun position given that the 
-%   detection is an actual pedestrian
-% - pLocalLightingGivenNonObject: probability of sun position given that
-%   the detection is _not_ a pedestrian.
-pObj = [1-boxes(:,end), boxes(:, end)];
-pLocalVisibility = zeros(nbObjects, 2);
-pLocalLightingGivenObject = zeros(nbObjects, 4);
-pLocalLightingGivenNonObject = zeros(nbObjects, 4);
-for i_obj = 1:nbObjects
-    % compute visibility features (shadow vs sunlit) 
-    visibilityFeatures = computeLocalVisibilityFeatures(img, boxes(i_obj,:), ...
-        'GIST', 1, 'SmallImg', 1, 'HSVHistogram', 1);
-    
-    % run local visibility classifier
-    pLocalVisibility(i_obj,:) = applyLocalClassifier(visibilityFeatures, ...
-        localVisibilityClassifier);
-    
-    % compute local lighting features (sun direction)
-    lightingFeatures = computeLocalLightingFeatures(img, boxes(i_obj,:), ...
-        'HOG', 1);
-        
-    % run local lighting classifier
-    pLocalLightingGivenObject(i_obj,:) = applyLocalClassifier(lightingFeatures, ...
-        lightingGivenObjectClassifier);
-
-    % run local lighting classifier
-    pLocalLightingGivenNonObject(i_obj,:) = applyLocalClassifier(lightingFeatures, ...
-        lightingGivenNonObjectClassifier.lightingGivenNonObjectClassifier);
-end
+fprintf('found %d bounding boxes in %.2fs.\n', size(boxes, 1), toc(tstart));
 
 %% Estimate the horizon line
 if isempty(horizonLine)
@@ -139,10 +103,12 @@ if isempty(horizonLine)
 end
 
 %% Estimate the illumination
-detInfo = struct('pObj', pObj, 'pLocalVisibility', pLocalVisibility, ...
-    'pLocalLightingGivenObject', pLocalLightingGivenObject, ...
-    'pLocalLightingGivenNonObject', pLocalLightingGivenNonObject);
+localPedestrianClassifiers = struct(...
+    'localVisibilityClassifier', localVisibilityClassifier, ...
+    'lightingGivenObjectClassifier', lightingGivenObjectClassifier, ...
+    'lightingGivenNonObjectClassifier', lightingGivenNonObjectClassifier.lightingGivenNonObjectClassifier);
 
+fprintf('Estimating illumination...\n'); tstart = tic;
 [probSun, skyData, shadowsData, wallsData, pedsData] = ...
     estimateIllumination(img, focalLength, horizonLine, ...
     'DoVote', 1, ...
@@ -150,7 +116,9 @@ detInfo = struct('pObj', pObj, 'pLocalVisibility', pLocalVisibility, ...
     'DoSky', doSky, 'SkyPredictor', skyPredictor, 'DoSkyClassif', doSkyClassif, 'SkyDb', skyDb, ...
     'DoShadows', doShadows, 'ShadowsPredictor', shadowsPredictor, 'BndInfo', bndInfo, 'ShadowInfo', shadowInfo, ...
     'DoWalls', doWalls, 'WallPredictor', wallPredictor, ...
-    'DoPedestrians', doPedestrians, 'PedestrianPredictor', pedsPredictor, 'DetInfo', detInfo);
+    'DoPedestrians', doPedestrians, 'PedestrianPredictor', pedsPredictor, ...
+    'BoundingBoxes', boxes, 'LocalPedestrianLightingClassifiers', localPedestrianClassifiers);
+fprintf('Illumination estimated in %.2fs\n', toc(tstart));
 
 %% Load the prior, and combine with the data term
 priorPath = fullfile('data', 'illuminationPriors', 'gpsAndTimeJoint-1000000.mat');
