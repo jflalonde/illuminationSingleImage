@@ -65,9 +65,12 @@ Compile the lib-svm
 Notes
 =====
 
-By default, this code uses the ICCV'09 version to estimate the probability 
+1. By default, this code uses the ICCV'09 version to estimate the probability 
 of the sun given the sky cue, my previous implementation seems to give better
 results. 
+
+2. If you experience problems with libsvm version 3.0.1, replace the `svm_model_matlab.c` file with the following: https://github.com/tomz/libsvm-ruby-swig/blob/master/libsvm-3.1/matlab/svm_model_matlab.c. Make sure that the `NUM_OF_RETURN_FIELD` macro is set to 10. Recompile libsvm after making this change. 
+*Thanks heaps to Swaminathan Sankaranrayanan for pointing this out!*
 
 
 References
