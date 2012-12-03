@@ -42,13 +42,14 @@ For the paths to work "out of the box", create yourself a base directory
 example, `projects/utils`, `projects/skyModel`, `projects/illuminationSingleImage`...
 The `setPath` function should be able to find them. 
 
-Information needed 
+Running the code on your own images
 ------------------
+
+If you want to run the code on your own images, you will need to pre-compute the following:
 
 * focal length (can be obtained from EXIF);
 * geometric context results, code available from [Derek Hoiem's website](http://www.cs.illinois.edu/homes/dhoiem);
 * detected ground shadow boundaries, code available from [my website](http://www.jflalonde.org/software.html).
-
 
 Compilation
 ===========
