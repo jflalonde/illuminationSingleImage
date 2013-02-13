@@ -62,6 +62,8 @@ Compile the lib-svm
 
 * go to `3rd_party/libsvm-mat-3.0-1` from inside matlab, and run 'make'
 
+Follow the compilation instructions of the `utils` package.
+
 
 Notes
 =====
@@ -72,6 +74,10 @@ results.
 
 2. If you experience problems with libsvm version 3.0.1, replace the `svm_model_matlab.c` file with the following: https://github.com/tomz/libsvm-ruby-swig/blob/master/libsvm-3.1/matlab/svm_model_matlab.c. Make sure that the `NUM_OF_RETURN_FIELD` macro is set to 10. Recompile libsvm after making this change. 
 *Thanks heaps to Swaminathan Sankaranrayanan for pointing this out!*
+
+3. Alternatively, the software apparently works with libsvm version 3.1. Thanks to Lin Gu for pointing this out. 
+
+4. If matlab complains that it can't find the function `xrepmat`, you can either install the [lightspeed](http://research.microsoft.com/en-us/um/people/minka/software/lightspeed/) package by Tom Minka, or safely replace all the `xrepmat` by the built-in `repmat`. 
 
 
 References
