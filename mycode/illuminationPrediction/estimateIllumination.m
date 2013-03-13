@@ -14,7 +14,8 @@ function [probSun, skyData, shadowsData, wallsData, pedsData] = ...
 defaultArgs = struct('DoVote', 0, 'DoWeightVote', 0, 'DoCueConfidence', 0, ...
     'GeomContextInfo', [], ...
     'DoSky', 0, 'SkyPredictor', [], 'DoSkyClassif', 0, 'SkyDb', [], ...
-    'DoShadows', 0, 'ShadowsPredictor', [], 'Boundaries', [], 'ShadowInfo', [], ...
+    'DoShadows', 0, 'ShadowsPredictor', [], 'Boundaries', [], ...
+    'BoundaryLabels', [], 'AllBoundaryProbabilities', [], 'IndStrongBnd', [], ...
     'DoWalls', 0, 'WallPredictor', [], ...
     'DoPedestrians', 0, 'PedestrianPredictor', [], 'BoundingBoxes', [], ...
     'LocalPedestrianLightingClassifiers', []);
@@ -26,7 +27,7 @@ geomContextInfo = args.GeomContextInfo;
 
 %% Shadows information
 boundaries = args.Boundaries;
-shadowInfo = args.ShadowInfo;
+% shadowInfo = args.ShadowInfo;
 
 %% Estimate illumination using sky
 if args.DoSky
@@ -49,11 +50,11 @@ if args.DoShadows
     if args.DoCueConfidence
         % keep all boundaries (strong)
 %         shadowBoundaries = boundaries(shadowInfo.indStrongBnd);
-        shadowBoundaries = boundaries(shadowInfo.boundaryLabels==0);
+        shadowBoundaries = boundaries(args.BoundaryLabels==0);
     else
         % only keep most likely boundaries
         shadowPrecisionThresh = 0.75;
-        shadowBoundaries = boundaries(shadowInfo.allBoundaryProbabilities>shadowPrecisionThresh);
+        shadowBoundaries = boundaries(args.AllBoundaryProbabilities>shadowPrecisionThresh);
 %         shadowBoundaries = boundaries(shadowInfo.boundaryLabels==0);
     end
     
@@ -71,9 +72,9 @@ if args.DoShadows
         
         % concatenate probabilty of shadow in the last column of shadowLines
         probImg = zeros(size(img,1), size(img,2));
-        for i=shadowInfo.indStrongBnd(:)'
+        for i=args.IndStrongBnd(:)'
             boundariesPxInd = convertBoundariesToPxInd(boundaries(i), size(img));
-            probImg(boundariesPxInd) = shadowInfo.allBoundaryProbabilities(i);
+            probImg(boundariesPxInd) = args.AllBoundaryProbabilities(i);
         end
         
         shadowProbs = meanLineIntensity(probImg, shadowLines, 1);

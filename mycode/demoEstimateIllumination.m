@@ -42,6 +42,14 @@ bndInfo = load(fullfile(dataPath, 'wseg25.mat'));
 boundaries = bndInfo.boundaries;
 
 shadowInfo = load(fullfile(dataPath, 'shadows.mat'));
+boundaryLabels = shadowInfo.boundaryLabels;
+indStrongBnd = shadowInfo.indStrongBnd;
+if ~isfield(shadowInfo, 'allBoundaryProbabilities')
+    allBoundaryProbabilities = zeros(length(boundaries), 1);
+    allBoundaryProbabilities(indStrongBnd) = shadowInfo.boundaryProbabilities;
+else
+    allBoundaryProbabilities = shadowInfo.allBoundaryProbabilities;
+end
 
 % Approximation to the focal length
 focalLength = size(img,2)*10/7;
@@ -71,7 +79,7 @@ sunVisibilityClassifierInfo = load(sunVisibilityPath);
 
 % Predict the sun visibility
 [~, prob] = predictSunVisibility(img, sunVisibilityClassifierInfo, ...
-    geomContextInfo, boundaries, shadowInfo);
+    geomContextInfo, boundaries, boundaryLabels);
 
 fprintf('Probability that sun is visible: %.2f.\n', prob(2));
 
@@ -120,7 +128,8 @@ fprintf('Estimating illumination...\n'); tstart = tic;
     'DoVote', 1, ...
     'GeomContextInfo', geomContextInfo, ...
     'DoSky', doSky, 'SkyPredictor', skyPredictor, 'DoSkyClassif', doSkyClassif, 'SkyDb', skyDb, ...
-    'DoShadows', doShadows, 'ShadowsPredictor', shadowsPredictor, 'Boundaries', boundaries, 'ShadowInfo', shadowInfo, ...
+    'DoShadows', doShadows, 'ShadowsPredictor', shadowsPredictor, 'Boundaries', boundaries, ...
+    'BoundaryLabels', boundaryLabels, 'AllBoundaryProbabilities', allBoundaryProbabilities, 'IndStrongBnd', indStrongBnd, ...
     'DoWalls', doWalls, 'WallPredictor', wallPredictor, ...
     'DoPedestrians', doPedestrians, 'PedestrianPredictor', pedsPredictor, ...
     'BoundingBoxes', boxes, 'LocalPedestrianLightingClassifiers', localPedestrianClassifiers);
