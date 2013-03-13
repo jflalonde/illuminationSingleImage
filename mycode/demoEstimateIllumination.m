@@ -39,6 +39,8 @@ geomContextInfo = load(fullfile(dataPath, 'geomContext.mat'));
 
 % Shadows information
 bndInfo = load(fullfile(dataPath, 'wseg25.mat'));
+boundaries = bndInfo.boundaries;
+
 shadowInfo = load(fullfile(dataPath, 'shadows.mat'));
 
 % Approximation to the focal length
@@ -69,7 +71,7 @@ sunVisibilityClassifierInfo = load(sunVisibilityPath);
 
 % Predict the sun visibility
 [~, prob] = predictSunVisibility(img, sunVisibilityClassifierInfo, ...
-    geomContextInfo, bndInfo, shadowInfo);
+    geomContextInfo, boundaries, shadowInfo);
 
 fprintf('Probability that sun is visible: %.2f.\n', prob(2));
 
@@ -118,7 +120,7 @@ fprintf('Estimating illumination...\n'); tstart = tic;
     'DoVote', 1, ...
     'GeomContextInfo', geomContextInfo, ...
     'DoSky', doSky, 'SkyPredictor', skyPredictor, 'DoSkyClassif', doSkyClassif, 'SkyDb', skyDb, ...
-    'DoShadows', doShadows, 'ShadowsPredictor', shadowsPredictor, 'BndInfo', bndInfo, 'ShadowInfo', shadowInfo, ...
+    'DoShadows', doShadows, 'ShadowsPredictor', shadowsPredictor, 'Boundaries', boundaries, 'ShadowInfo', shadowInfo, ...
     'DoWalls', doWalls, 'WallPredictor', wallPredictor, ...
     'DoPedestrians', doPedestrians, 'PedestrianPredictor', pedsPredictor, ...
     'BoundingBoxes', boxes, 'LocalPedestrianLightingClassifiers', localPedestrianClassifiers);

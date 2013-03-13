@@ -1,5 +1,5 @@
 function [vis, prob] = predictSunVisibility(img, visibilityClassifier, ...
-    geomContextInfo, bndInfo, shadowInfo)
+    geomContextInfo, boundaries, shadowInfo)
 % Predicts the sun visibility in an image.
 %
 % See also:
@@ -14,7 +14,7 @@ visibilityFeaturesOpts = {'GeometricContextArea', 1, 'MeanSkyColor', 1, 'MeanGro
 
 % parse the options
 visibilityFeaturesOpts = parseVisibilityFeaturesOpts(visibilityFeaturesOpts, ...
-    geomContextInfo, bndInfo, shadowInfo);
+    geomContextInfo, boundaries, shadowInfo);
 
 % compute visibility features
 visibilityFeatures = computeSunVisibilityFeatures(img, visibilityFeaturesOpts{:});    
@@ -36,7 +36,7 @@ visibilityFeaturesScaled = scaleFeaturesSVM(catFeatures, ...
 
 
 function visibilityFeaturesOpts = parseVisibilityFeaturesOpts(visibilityFeaturesOpts, ...
-    geomContextInfo, bndInfo, shadowInfo)
+    geomContextInfo, boundaries, shadowInfo)
 % Helper function
 
 % extract masks from geometric context information
@@ -90,7 +90,7 @@ end
 if subArgs.GroundShadows        
     % load the ground shadows & boundary information    
     visibilityFeaturesOpts = cat(2, visibilityFeaturesOpts, ...
-        {'ShadowBoundaries', bndInfo.boundaries(shadowInfo.boundaryLabels==0), ...
+        {'ShadowBoundaries', boundaries(shadowInfo.boundaryLabels==0), ...
         'GroundProb', groundProb});
 end
 

@@ -14,7 +14,7 @@ function [probSun, skyData, shadowsData, wallsData, pedsData] = ...
 defaultArgs = struct('DoVote', 0, 'DoWeightVote', 0, 'DoCueConfidence', 0, ...
     'GeomContextInfo', [], ...
     'DoSky', 0, 'SkyPredictor', [], 'DoSkyClassif', 0, 'SkyDb', [], ...
-    'DoShadows', 0, 'ShadowsPredictor', [], 'BndInfo', [], 'ShadowInfo', [], ...
+    'DoShadows', 0, 'ShadowsPredictor', [], 'Boundaries', [], 'ShadowInfo', [], ...
     'DoWalls', 0, 'WallPredictor', [], ...
     'DoPedestrians', 0, 'PedestrianPredictor', [], 'BoundingBoxes', [], ...
     'LocalPedestrianLightingClassifiers', []);
@@ -25,7 +25,7 @@ args = parseargs(defaultArgs, varargin{:});
 geomContextInfo = args.GeomContextInfo;
 
 %% Shadows information
-bndInfo = args.BndInfo;
+boundaries = args.Boundaries;
 shadowInfo = args.ShadowInfo;
 
 %% Estimate illumination using sky
@@ -48,13 +48,13 @@ if args.DoShadows
     fprintf('Estimating illumination from ground shadows...'); tstart = tic;
     if args.DoCueConfidence
         % keep all boundaries (strong)
-%         shadowBoundaries = bndInfo.boundaries(shadowInfo.indStrongBnd);
-        shadowBoundaries = bndInfo.boundaries(shadowInfo.boundaryLabels==0);
+%         shadowBoundaries = boundaries(shadowInfo.indStrongBnd);
+        shadowBoundaries = boundaries(shadowInfo.boundaryLabels==0);
     else
         % only keep most likely boundaries
         shadowPrecisionThresh = 0.75;
-        shadowBoundaries = bndInfo.boundaries(shadowInfo.allBoundaryProbabilities>shadowPrecisionThresh);
-%         shadowBoundaries = bndInfo.boundaries(shadowInfo.boundaryLabels==0);
+        shadowBoundaries = boundaries(shadowInfo.allBoundaryProbabilities>shadowPrecisionThresh);
+%         shadowBoundaries = boundaries(shadowInfo.boundaryLabels==0);
     end
     
     % force the ground to be zero below the horizon
@@ -72,7 +72,7 @@ if args.DoShadows
         % concatenate probabilty of shadow in the last column of shadowLines
         probImg = zeros(size(img,1), size(img,2));
         for i=shadowInfo.indStrongBnd(:)'
-            boundariesPxInd = convertBoundariesToPxInd(bndInfo.boundaries(i), size(img));
+            boundariesPxInd = convertBoundariesToPxInd(boundaries(i), size(img));
             probImg(boundariesPxInd) = shadowInfo.allBoundaryProbabilities(i);
         end
         
