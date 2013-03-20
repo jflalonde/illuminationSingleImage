@@ -9,7 +9,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [illProb, skyLabel, skyArea] = estimateIlluminationFromSky(img, skyPredictor, skyProb, ...
-    imgSuperpixels, focalLength, horizonLine, varargin)
+    ~, focalLength, horizonLine, varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Copyright 2006-2009 Jean-Francois Lalonde
 % Carnegie Mellon University
