@@ -17,14 +17,11 @@ pathMyCode = getPathName('code', 'mycode');
 pathUtils = getPathName('codeUtils');
 
 %% Turn off some annoying warnings
+warning('on', 'all');
 warning off Images:initSize:adjustingMag;
 
 randSeed = sum(100*clock) + sum(host);
-if ~isempty(strfind(version, '7.7'))
-    RandStream.setDefaultStream(RandStream('mt19937ar','seed', randSeed))
-else
-    rand('twister', randSeed);
-end
+RandStream.setGlobalStream(RandStream('mt19937ar','seed', randSeed))
 
 % Restore to initial state
 restoredefaultpath;
