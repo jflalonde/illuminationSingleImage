@@ -12,6 +12,11 @@ function demoEstimateIllumination
 
 %% User parameters
 
+% Setting this to false will compute the geometric context and detect
+% shadows on the test image. Basically, set this to false if you're running
+% the code on your own images.
+demoMode = true;
+
 dataPath = 'data';
 skyDbPath = fullfile(dataPath, 'skyDb-Hsv.mat');
 sunVisibilityPath = fullfile(dataPath, 'pSunGivenFeatures.mat');
@@ -31,24 +36,40 @@ doWalls = 1;
 % Pedestrian parameters
 doPedestrians = 1;
 
-%% Load the image and its relevant data (see README.txt)
+%% Load the image
 img = im2double(imread(fullfile(dataPath, 'img.jpg')));
 
-% Geometric context information
-geomContextInfo = load(fullfile(dataPath, 'geomContext.mat'));
+%% Compute geometric context and shadows
+if demoMode
+    % We're in demo mode, so just load previously-computed data
+    
+    % Geometric context information
+    geomContextInfo = load(fullfile(dataPath, 'geomContext.mat'));
 
-% Shadows information
-bndInfo = load(fullfile(dataPath, 'wseg25.mat'));
-boundaries = bndInfo.boundaries;
+    % Shadows information
+    bndInfo = load(fullfile(dataPath, 'wseg25.mat'));
+    boundaries = bndInfo.boundaries;
 
-shadowInfo = load(fullfile(dataPath, 'shadows.mat'));
-boundaryLabels = shadowInfo.boundaryLabels;
-indStrongBnd = shadowInfo.indStrongBnd;
-if ~isfield(shadowInfo, 'allBoundaryProbabilities')
-    allBoundaryProbabilities = zeros(length(boundaries), 1);
-    allBoundaryProbabilities(indStrongBnd) = shadowInfo.boundaryProbabilities;
-else
+    shadowInfo = load(fullfile(dataPath, 'shadows.mat'));
+    boundaryLabels = shadowInfo.boundaryLabels;
+    indStrongBnd = shadowInfo.indStrongBnd;
     allBoundaryProbabilities = shadowInfo.allBoundaryProbabilities;
+    
+else
+    % We're not in demo mode. Actually compute what we need.
+  
+    % First, compute geometric context
+    classifiersPath = getPathName('codeUtilsPrivate', '3rd_party', 'GeometricContext', 'data');
+    classifiers = load(fullfile(classifiersPath, 'ijcvClassifier.mat'));
+
+    geomContextInfo = computeGeometricContext(img, classifiers);
+    
+    % Second, detect shadows on the ground
+    [boundaries, boundaryProbabilities, boundaryLabels, indStrongBnd] = ...
+        detectShadows(img, 'groundProb', geomContextInfo.allGroundMask);
+    
+    allBoundaryProbabilities = zeros(length(boundaries), 1);
+    allBoundaryProbabilities(indStrongBnd) = boundaryProbabilities;
 end
 
 % Approximation to the focal length
