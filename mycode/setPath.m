@@ -32,3 +32,9 @@ addpath(genpath(getPathName('codeSkyModel')));
 addpath(genpath(getPathName('codeShadowDetection')));
 addpath(genpath(pathUtils));
 addpath(genpath(path3rdParty));
+
+% geometric context
+addpath(genpath(getPathName('codeUtilsPrivate', '3rd_party', 'GeometricContext')));
+
+% graph cuts (needed for the shadow detection)
+addpath(genpath(getPathName('codeUtilsPrivate', '3rd_party', 'GCmex1.9')));
