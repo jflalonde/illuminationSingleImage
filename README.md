@@ -7,6 +7,8 @@ Journal of Computer Vision, vol. 98, no. 2, pp. 123--145, Jun. 2012.
 
 Please cite this paper if you use this code in your work.
 
+*NEW*: Now *much* easier to run on your own images! See below.
+
 Getting started
 ===============
 
@@ -45,11 +47,18 @@ The `setPath` function should be able to find them.
 Running the code on your own images
 ------------------
 
-If you want to run the code on your own images, you will need to pre-compute the following:
+It is now *much* easier to run the code on your own images! All you have to 
+do is to set the `demoMode` flag to `false` and it will automatically compute
+the geometric context and the ground shadow boundaries. 
 
-* focal length (can be obtained from EXIF);
-* geometric context results, code available from [Derek Hoiem's website](http://www.cs.illinois.edu/homes/dhoiem);
-* detected ground shadow boundaries, code available from [my website](http://www.jflalonde.org/software.html).
+You will need to make sure the following packages are installed and running
+(refer to their respective websites for installation instructions):
+
+* geometric context, code available from [Derek Hoiem's website](http://www.cs.illinois.edu/homes/dhoiem);
+* detected ground shadow boundaries, code available from [my website](http://www.jflalonde.org/software.html#shadowDetection).
+
+Finally, you also need to make sure that they, as well as all their dependencies,
+are added to the path. See the `setPath.m` function for a starting point.
 
 Compilation
 ===========
