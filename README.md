@@ -103,9 +103,10 @@ The world coordinates `(x,y,z)` have the following reference frame:
 z  v
 </code></pre>
   
-The camera is looking in the negative z direction. For convenience (or just to 
-make things more complicated), we define azimuth=0 to be the optical axis
-direction. Therefore, to convert from spherical to cartesian coordinates, use:
+The camera is looking in the negative `z` direction. For convenience (or just to 
+make things more complicated), we define `azimuth=0` to be the camera viewing
+direction, and `azimuth>0` points towards the right of the camera. 
+Therefore, to convert from spherical to cartesian coordinates, you should use:
 
     x = sin(zenith).*sin(azimuth);
     y = cos(zenith);
