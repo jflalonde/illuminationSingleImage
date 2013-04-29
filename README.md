@@ -89,6 +89,29 @@ results.
 4. If matlab complains that it can't find the function `xrepmat`, you can either install the [lightspeed](http://research.microsoft.com/en-us/um/people/minka/software/lightspeed/) package by Tom Minka, or safely replace all the `xrepmat` by the built-in `repmat`. 
 
 
+Coordinates
+===========
+
+The world coordinates `(x,y,z)` have the following reference frame:
+
+<pre><code>
+     ^ y
+     |
+     |
+     .----> x
+    /
+z  v
+</code></pre>
+  
+The camera is looking in the negative z direction. For convenience (or just to 
+make things more complicated), we define azimuth=0 to be the optical axis
+direction. Therefore, to convert from spherical to cartesian coordinates, use:
+
+    x = sin(zenith).*sin(azimuth);
+    y = cos(zenith);
+    z = -sin(zenith).*cos(azimuth);
+
+
 References
 ==========
 
