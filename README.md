@@ -40,8 +40,8 @@ Requires the following 3rd-party libs (included):
 * [Video Compass code from Derek Hoiem](http://www.cs.illinois.edu/homes/dhoiem/), included in `3rd_party/hoiemVideoCompass`;
 
 For the paths to work "out of the box", create yourself a base directory 
-(e.g. `projects`), and download all of the packages in that directory. For
-example, `projects/utils`, `projects/skyModel`, `projects/illuminationSingleImage`...
+(e.g. `code`), and download all of the packages in that directory. For
+example, `code/utils`, `code/skyModel`, `code/illuminationSingleImage`...
 The `setPath` function should be able to find them. 
 
 Running the code on your own images

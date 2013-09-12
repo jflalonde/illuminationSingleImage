@@ -13,10 +13,10 @@ function path = getPathName(str, varargin)
 % Jean-Francois Lalonde
 
 % use path to 'getPathName' to retrieve the base path
-basePath = fileparts(fileparts(fileparts(fileparts(fileparts(which('getPathName.m'))))));
+basePath = fileparts(fileparts(fileparts(fileparts(which('getPathName.m')))));
 
 resultsBasePath = fullfile(basePath, 'results');
-codeBasePath = fullfile(basePath, 'code', 'projects');
+codeBasePath = fullfile(basePath, 'code');
 
 projectName = 'illuminationSingleImage';
 
