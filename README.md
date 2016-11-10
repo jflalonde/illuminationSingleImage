@@ -29,7 +29,6 @@ Requirements
 Requires some of my software packages (available on github):
 
 * My [utils](http://www.github.com/jflalonde/utils) package;
-* My [skyModel](http://www.github.com/jflalonde/skyModel) package;
 * My [shadowDetection](http://www.github.com/jflalonde/shadowDetection) package;
 
 Requires the following 3rd-party libs (included):
@@ -88,6 +87,8 @@ results.
 
 4. If matlab complains that it can't find the function `xrepmat`, you can either install the [lightspeed](http://research.microsoft.com/en-us/um/people/minka/software/lightspeed/) package by Tom Minka, or safely replace all the `xrepmat` by the built-in `repmat`. 
 
+5. The "sky illumination" code was broken recently due to a change in the `skyModel` repo. Please pull! 
+*Thanks to Yannick Hold-Geoffroy for finding that bug!*
 
 Coordinates
 ===========
