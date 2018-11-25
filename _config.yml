@@ -1,0 +1,8 @@
+title: illuminationSingleImage
+description: MATLAB implementation of our llumination estimation technique from a single image (ICCV'09 and IJCV'12 papers)
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-tactile
+
+gems:
+  - jekyll-mentions
