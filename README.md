@@ -120,3 +120,12 @@ References
 [1]	P. Felzenszwalb, D. McAllester, and D. Ramanan, "A discriminatively 
 trained, multiscale, deformable part model," presented at the IEEE 
 Conference on Computer Vision and Pattern Recognition, 2008.
+OSCAR GOMEZ
+VENENO.iot
+This branch has conflicts that must be resolved
+ Use the command line to resolve conflicts before continuing.
+Conflicting files
+karma-shared.conf.js
+package.json
+test/ng/browserSpecs.js
+yarn.lock
